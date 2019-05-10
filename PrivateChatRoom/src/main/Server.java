@@ -13,13 +13,14 @@ import java.util.Iterator;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.LayoutStyle;
 import javax.swing.WindowConstants;
 
-public class Server extends javax.swing.JFrame {
+public class Server extends JFrame {
 
 	private JButton b_clear;
 	private JButton b_end;
@@ -123,6 +124,7 @@ public class Server extends javax.swing.JFrame {
 
 		tellEveryone("Server:is stopping and all users will be disconnected.\n:Chat");
 		ta_chat.append("Server stopping... \n");
+		
 
 		ta_chat.setText("");
 	}
@@ -135,7 +137,7 @@ public class Server extends javax.swing.JFrame {
 	}
 
 	private void usersActionPerformed(ActionEvent evt) {
-		ta_chat.append("\n Online users : \n");
+		ta_chat.append("Online users : \n");
 		for (String current_user : users) {
 			ta_chat.append(current_user);
 			ta_chat.append("\n");
@@ -217,9 +219,9 @@ public class Server extends javax.swing.JFrame {
 	}
 
 	public class ClientHandler implements Runnable {
-		BufferedReader reader;
-		Socket sock;
-		PrintWriter client;
+		private BufferedReader reader;
+		private Socket sock;
+		private PrintWriter client;
 
 		public ClientHandler(Socket clientSocket, PrintWriter user) {
 			client = user;

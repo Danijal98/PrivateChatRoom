@@ -333,7 +333,7 @@ public class Client extends JFrame {
 
 
 	public void sendDisconnect() {
-		String bye = (username + ": Disconnect");
+		String bye = (username + ":has Disconected." + ":Disconnect");
 		try {
 			writer.println(bye);
 			writer.flush();
@@ -348,11 +348,10 @@ public class Client extends JFrame {
 			ta_chat.append("Disconnected.\n");
 			sock.close();
 		} catch (Exception ex) {
-			ta_chat.append("Failed to disconnect. \n");
+			ta_chat.append("Failed to disconnect.\n");
 		}
 		isConnected = false;
 		tf_username.setEditable(true);
-
 	}
 
 	/*
