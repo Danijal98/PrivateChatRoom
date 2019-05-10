@@ -29,13 +29,13 @@ public class Client extends javax.swing.JFrame {
 	private JScrollPane jScrollPane1;
 	private JLabel lb_address;
 	private JLabel lb_name;
-	private JLabel lb_password;
+	private JLabel lb_key;
 	private JLabel lb_port;
 	private JLabel lb_username;
 	private JTextArea ta_chat;
 	private JTextField tf_address;
 	private JTextField tf_chat;
-	private JTextField tf_password;
+	private JTextField tf_key;
 	private JTextField tf_port;
 	private JTextField tf_username;
 	
@@ -59,8 +59,8 @@ public class Client extends javax.swing.JFrame {
 		tf_port = new JTextField();
 		lb_username = new JLabel();
 		tf_username = new JTextField();
-		lb_password = new JLabel();
-		tf_password = new JTextField();
+		lb_key = new JLabel();
+		tf_key = new JTextField();
 		b_connect = new JButton();
 		b_disconnect = new JButton();
 		b_anonymous = new JButton();
@@ -101,7 +101,7 @@ public class Client extends javax.swing.JFrame {
 			}
 		});
 
-		lb_password.setText("Password : ");
+		lb_key.setText("Encrypt Key : ");
 
 		b_connect.setText("Connect");
 		b_connect.addActionListener(new ActionListener() {
@@ -159,13 +159,13 @@ public class Client extends javax.swing.JFrame {
 										.addComponent(tf_username))
 								.addGap(18, 18, 18)
 								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-										.addComponent(lb_password, GroupLayout.DEFAULT_SIZE,
+										.addComponent(lb_key, GroupLayout.DEFAULT_SIZE,
 												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 										.addComponent(lb_port, GroupLayout.DEFAULT_SIZE,
 												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
 								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-										.addComponent(tf_password).addComponent(tf_port,
+										.addComponent(tf_key).addComponent(tf_port,
 												GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE))
 								.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
 								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -190,9 +190,9 @@ public class Client extends javax.swing.JFrame {
 								.addComponent(b_anonymous))
 						.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
 						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-								.addComponent(tf_username).addComponent(tf_password)
+								.addComponent(tf_username).addComponent(tf_key)
 								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-										.addComponent(lb_username).addComponent(lb_password).addComponent(b_connect)
+										.addComponent(lb_username).addComponent(lb_key).addComponent(b_connect)
 										.addComponent(b_disconnect)))
 						.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
 						.addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 310,
@@ -232,7 +232,7 @@ public class Client extends javax.swing.JFrame {
 
 
 	public void sendDisconnect() {
-		String bye = (username + ": :Disconnect");
+		String bye = (username + ": Disconnect");
 		try {
 			writer.println(bye);
 			writer.flush();
