@@ -1,6 +1,12 @@
 package main;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -10,18 +16,23 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Random;
 
-import javax.swing.GroupLayout;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.LayoutStyle;
 import javax.swing.WindowConstants;
 
-public class Client extends javax.swing.JFrame {
+public class Client extends JFrame {
 	
 	//View vars
+	private JPanel panelCenter;
+	private JPanel panelRight;
+	private JSplitPane splitHorizontal;
 	private JButton b_anonymous;
 	private JButton b_connect;
 	private JButton b_disconnect;
@@ -53,14 +64,22 @@ public class Client extends javax.swing.JFrame {
 	}
 	
 	private void initComponents() {
+		panelCenter = new JPanel();
+		panelRight = new JPanel(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		splitHorizontal = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,panelCenter,panelRight);
 		lb_address = new JLabel();
 		tf_address = new JTextField();
+		tf_address.setPreferredSize(new Dimension(150, 25));
 		lb_port = new JLabel();
 		tf_port = new JTextField();
+		tf_port.setPreferredSize(new Dimension(150, 25));
 		lb_username = new JLabel();
 		tf_username = new JTextField();
+		tf_username.setPreferredSize(new Dimension(150, 25));
 		lb_key = new JLabel();
 		tf_key = new JTextField();
+		tf_key.setPreferredSize(new Dimension(150, 25));
 		b_connect = new JButton();
 		b_disconnect = new JButton();
 		b_anonymous = new JButton();
@@ -126,6 +145,8 @@ public class Client extends javax.swing.JFrame {
 
 		ta_chat.setColumns(20);
 		ta_chat.setRows(5);
+		ta_chat.setEditable(false);
+		ta_chat.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1, true));
 		jScrollPane1.setViewportView(ta_chat);
 
 		b_send.setText("SEND");
@@ -134,76 +155,156 @@ public class Client extends javax.swing.JFrame {
 				sendActionPerformed(evt);
 			}
 		});
-
-		GroupLayout layout = new GroupLayout(getContentPane());
-		getContentPane().setLayout(layout);
-		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(layout
-				.createSequentialGroup().addContainerGap()
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup()
-								.addComponent(tf_chat, GroupLayout.PREFERRED_SIZE, 352,
-										GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-								.addComponent(b_send, GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE))
-						.addComponent(jScrollPane1)
-						.addGroup(layout.createSequentialGroup()
-								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
-										.addComponent(lb_username, GroupLayout.DEFAULT_SIZE, 62,
-												Short.MAX_VALUE)
-										.addComponent(lb_address, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-								.addGap(18, 18, 18)
-								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-										.addComponent(tf_address, GroupLayout.DEFAULT_SIZE, 89,
-												Short.MAX_VALUE)
-										.addComponent(tf_username))
-								.addGap(18, 18, 18)
-								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-										.addComponent(lb_key, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(lb_port, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-										.addComponent(tf_key).addComponent(tf_port,
-												GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE))
-								.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-										.addGroup(layout.createSequentialGroup().addComponent(b_connect).addGap(2, 2, 2)
-												.addComponent(b_disconnect).addGap(0, 0, Short.MAX_VALUE))
-										.addComponent(b_anonymous, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-				.addContainerGap())
-				.addGroup(GroupLayout.Alignment.TRAILING,
-						layout.createSequentialGroup()
-								.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(lb_name).addGap(201, 201, 201)));
-		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addContainerGap()
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-								.addComponent(lb_address)
-								.addComponent(tf_address, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lb_port)
-								.addComponent(tf_port, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(b_anonymous))
-						.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-								.addComponent(tf_username).addComponent(tf_key)
-								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-										.addComponent(lb_username).addComponent(lb_key).addComponent(b_connect)
-										.addComponent(b_disconnect)))
-						.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-						.addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 310,
-								GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-						.addGroup(layout
-								.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(tf_chat)
-								.addComponent(b_send, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE))
-						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(lb_name)));
-
+		
+		this.setLayout(new BorderLayout());
+		jScrollPane1.setPreferredSize(new Dimension(510, 300));
+		tf_chat.setPreferredSize(new Dimension(400, 30));
+		gbc.insets = new Insets(5, 5, 5, 5);
+		panelCenter.setLayout(new GridBagLayout());
+		b_send.setPreferredSize(new Dimension(100, 30));
+		JPanel textPanel = new JPanel(new BorderLayout());
+		textPanel.add(jScrollPane1, BorderLayout.CENTER);
+		
+		gbc.gridwidth = 2;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		panelCenter.add(textPanel,gbc);
+		
+		gbc.gridwidth = 1;
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		panelCenter.add(tf_chat,gbc);
+		
+		gbc.gridwidth = 1;
+		gbc.gridx = 1;
+		gbc.gridy = 1;
+		panelCenter.add(b_send,gbc);
+		
+		gbc.gridwidth = 1;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		panelRight.add(lb_username,gbc);
+		
+		gbc.gridwidth = 1;
+		gbc.gridx = 1;
+		gbc.gridy = 0;
+		panelRight.add(tf_username,gbc);
+		
+		gbc.gridwidth = 1;
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		panelRight.add(lb_address,gbc);
+		
+		gbc.gridwidth = 1;
+		gbc.gridx = 1;
+		gbc.gridy = 1;
+		panelRight.add(tf_address,gbc);
+		
+		gbc.gridwidth = 1;
+		gbc.gridx = 0;
+		gbc.gridy = 2;
+		panelRight.add(lb_port,gbc);
+		
+		gbc.gridwidth = 1;
+		gbc.gridx = 1;
+		gbc.gridy = 2;
+		panelRight.add(tf_port,gbc);
+		
+		gbc.gridwidth = 1;
+		gbc.gridx = 0;
+		gbc.gridy = 3;
+		panelRight.add(lb_key,gbc);
+		
+		gbc.gridwidth = 1;
+		gbc.gridx = 1;
+		gbc.gridy = 3;
+		panelRight.add(tf_key,gbc);
+		
+		gbc.gridwidth = 2;
+		gbc.gridx = 0;
+		gbc.gridy = 4;
+		panelRight.add(b_connect,gbc);
+		
+		gbc.gridwidth = 2;
+		gbc.gridx = 0;
+		gbc.gridy = 5;
+		panelRight.add(b_disconnect,gbc);
+		
+		gbc.gridwidth = 2;
+		gbc.gridx = 0;
+		gbc.gridy = 6;
+		panelRight.add(b_anonymous,gbc);
+		
+//		GroupLayout layout = new GroupLayout(getContentPane());
+//		getContentPane().setLayout(layout);
+//		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(layout
+//				.createSequentialGroup().addContainerGap()
+//				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+//						.addGroup(layout.createSequentialGroup()
+//								.addComponent(tf_chat, GroupLayout.PREFERRED_SIZE, 352,
+//										GroupLayout.PREFERRED_SIZE)
+//								.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+//								.addComponent(b_send, GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE))
+//						.addComponent(jScrollPane1)
+//						.addGroup(layout.createSequentialGroup()
+//								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
+//										.addComponent(lb_username, GroupLayout.DEFAULT_SIZE, 62,
+//												Short.MAX_VALUE)
+//										.addComponent(lb_address, GroupLayout.DEFAULT_SIZE,
+//												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+//								.addGap(18, 18, 18)
+//								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+//										.addComponent(tf_address, GroupLayout.DEFAULT_SIZE, 89,
+//												Short.MAX_VALUE)
+//										.addComponent(tf_username))
+//								.addGap(18, 18, 18)
+//								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+//										.addComponent(lb_key, GroupLayout.DEFAULT_SIZE,
+//												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+//										.addComponent(lb_port, GroupLayout.DEFAULT_SIZE,
+//												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+//								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+//								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+//										.addComponent(tf_key).addComponent(tf_port,
+//												GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE))
+//								.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+//								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+//										.addGroup(layout.createSequentialGroup().addComponent(b_connect).addGap(2, 2, 2)
+//												.addComponent(b_disconnect).addGap(0, 0, Short.MAX_VALUE))
+//										.addComponent(b_anonymous, GroupLayout.DEFAULT_SIZE,
+//												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+//				.addContainerGap())
+//				.addGroup(GroupLayout.Alignment.TRAILING,
+//						layout.createSequentialGroup()
+//								.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+//								.addComponent(lb_name).addGap(201, 201, 201)));
+//		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+//				.addGroup(layout.createSequentialGroup().addContainerGap()
+//						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+//								.addComponent(lb_address)
+//								.addComponent(tf_address, GroupLayout.PREFERRED_SIZE,
+//										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+//								.addComponent(lb_port)
+//								.addComponent(tf_port, GroupLayout.PREFERRED_SIZE,
+//										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+//								.addComponent(b_anonymous))
+//						.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+//						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+//								.addComponent(tf_username).addComponent(tf_key)
+//								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+//										.addComponent(lb_username).addComponent(lb_key).addComponent(b_connect)
+//										.addComponent(b_disconnect)))
+//						.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+//						.addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 310,
+//								GroupLayout.PREFERRED_SIZE)
+//						.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+//						.addGroup(layout
+//								.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(tf_chat)
+//								.addComponent(b_send, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE))
+//						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(lb_name)));
+		this.add(splitHorizontal, BorderLayout.CENTER);
 		pack();
+		this.setLocationRelativeTo(null);
 	}
 
 	public void ListenThread() {
