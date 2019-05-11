@@ -1,6 +1,11 @@
 package main;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -11,17 +16,25 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.LayoutStyle;
 import javax.swing.WindowConstants;
 
 public class Server extends JFrame {
 
+	private JPanel panelCenter;
+	private JPanel panelRight;
+	private JSplitPane splitHorizontal;
 	private JButton b_clear;
 	private JButton b_end;
 	private JButton b_start;
@@ -38,13 +51,24 @@ public class Server extends JFrame {
 	}
 
 	private void initComponents() {
-
+		panelCenter = new JPanel(new BorderLayout());
+		panelRight = new JPanel();
+		panelRight.setLayout(new BoxLayout(panelRight, BoxLayout.Y_AXIS));
+		splitHorizontal = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,panelCenter,panelRight);
 		jScrollPane1 = new JScrollPane();
 		ta_chat = new JTextArea();
 		b_start = new JButton();
+		b_start.setMaximumSize(new Dimension(150, 25));
+		b_start.setAlignmentX(JComponent.CENTER_ALIGNMENT);
 		b_end = new JButton();
+		b_end.setMaximumSize(new Dimension(150, 25));
+		b_end.setAlignmentX(JComponent.CENTER_ALIGNMENT);
 		b_users = new JButton();
+		b_users.setMaximumSize(new Dimension(150, 25));
+		b_users.setAlignmentX(JComponent.CENTER_ALIGNMENT);
 		b_clear = new JButton();
+		b_clear.setMaximumSize(new Dimension(150, 25));
+		b_clear.setAlignmentX(JComponent.CENTER_ALIGNMENT);
 		lb_name = new JLabel();
 
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -83,35 +107,47 @@ public class Server extends JFrame {
 				clearActionPerformed(evt);
 			}
 		});
-
-		GroupLayout layout = new GroupLayout(getContentPane());
-		getContentPane().setLayout(layout);
-		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(layout
-				.createSequentialGroup().addContainerGap()
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(jScrollPane1)
-						.addGroup(layout.createSequentialGroup()
-								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-										.addComponent(b_end, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-												Short.MAX_VALUE)
-										.addComponent(b_start, javax.swing.GroupLayout.DEFAULT_SIZE, 75,
-												Short.MAX_VALUE))
-								.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 291, Short.MAX_VALUE)
-								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-										.addComponent(b_clear, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-												Short.MAX_VALUE)
-										.addComponent(b_users, GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE))))
-				.addContainerGap()).addGroup(GroupLayout.Alignment.TRAILING,
-						layout.createSequentialGroup().addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(lb_name).addGap(209, 209, 209)));
-		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addContainerGap()
-						.addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE).addGap(18, 18, 18)
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(b_start)
-								.addComponent(b_users))
-						.addGap(18, 18, 18).addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-								.addComponent(b_clear).addComponent(b_end))
-						.addGap(4, 4, 4).addComponent(lb_name)));
-
+		
+		this.setLayout(new BorderLayout());
+		ta_chat.setEditable(false);
+		jScrollPane1.setPreferredSize(new Dimension(510, 300));
+		panelCenter.add(jScrollPane1);
+		panelRight.add(b_start);
+//		panelRight.add(Box.createGlue());
+		panelRight.add(b_end);
+//		panelRight.add(Box.createGlue());
+		panelRight.add(b_users);
+//		panelRight.add(Box.createGlue());
+		panelRight.add(b_clear);
+		
+//		GroupLayout layout = new GroupLayout(getContentPane());
+//		getContentPane().setLayout(layout);
+//		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(layout
+//				.createSequentialGroup().addContainerGap()
+//				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(jScrollPane1)
+//						.addGroup(layout.createSequentialGroup()
+//								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+//										.addComponent(b_end, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+//												Short.MAX_VALUE)
+//										.addComponent(b_start, javax.swing.GroupLayout.DEFAULT_SIZE, 75,
+//												Short.MAX_VALUE))
+//								.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 291, Short.MAX_VALUE)
+//								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+//										.addComponent(b_clear, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+//												Short.MAX_VALUE)
+//										.addComponent(b_users, GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE))))
+//				.addContainerGap()).addGroup(GroupLayout.Alignment.TRAILING,
+//						layout.createSequentialGroup().addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+//								.addComponent(lb_name).addGap(209, 209, 209)));
+//		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+//				.addGroup(layout.createSequentialGroup().addContainerGap()
+//						.addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE).addGap(18, 18, 18)
+//						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(b_start)
+//								.addComponent(b_users))
+//						.addGap(18, 18, 18).addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+//								.addComponent(b_clear).addComponent(b_end))
+//						.addGap(4, 4, 4).addComponent(lb_name)));
+		this.add(splitHorizontal, BorderLayout.CENTER);
 		pack();
 	}
 

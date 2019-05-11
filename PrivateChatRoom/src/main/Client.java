@@ -143,6 +143,12 @@ public class Client extends JFrame {
 			}
 		});
 
+		tf_chat.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				sendActionPerformed(evt);
+			}
+		});
+		
 		ta_chat.setColumns(20);
 		ta_chat.setRows(5);
 		ta_chat.setEditable(false);
@@ -235,73 +241,6 @@ public class Client extends JFrame {
 		gbc.gridy = 6;
 		panelRight.add(b_anonymous,gbc);
 		
-//		GroupLayout layout = new GroupLayout(getContentPane());
-//		getContentPane().setLayout(layout);
-//		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(layout
-//				.createSequentialGroup().addContainerGap()
-//				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-//						.addGroup(layout.createSequentialGroup()
-//								.addComponent(tf_chat, GroupLayout.PREFERRED_SIZE, 352,
-//										GroupLayout.PREFERRED_SIZE)
-//								.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-//								.addComponent(b_send, GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE))
-//						.addComponent(jScrollPane1)
-//						.addGroup(layout.createSequentialGroup()
-//								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
-//										.addComponent(lb_username, GroupLayout.DEFAULT_SIZE, 62,
-//												Short.MAX_VALUE)
-//										.addComponent(lb_address, GroupLayout.DEFAULT_SIZE,
-//												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-//								.addGap(18, 18, 18)
-//								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-//										.addComponent(tf_address, GroupLayout.DEFAULT_SIZE, 89,
-//												Short.MAX_VALUE)
-//										.addComponent(tf_username))
-//								.addGap(18, 18, 18)
-//								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-//										.addComponent(lb_key, GroupLayout.DEFAULT_SIZE,
-//												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-//										.addComponent(lb_port, GroupLayout.DEFAULT_SIZE,
-//												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-//								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-//								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-//										.addComponent(tf_key).addComponent(tf_port,
-//												GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE))
-//								.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-//								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-//										.addGroup(layout.createSequentialGroup().addComponent(b_connect).addGap(2, 2, 2)
-//												.addComponent(b_disconnect).addGap(0, 0, Short.MAX_VALUE))
-//										.addComponent(b_anonymous, GroupLayout.DEFAULT_SIZE,
-//												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-//				.addContainerGap())
-//				.addGroup(GroupLayout.Alignment.TRAILING,
-//						layout.createSequentialGroup()
-//								.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-//								.addComponent(lb_name).addGap(201, 201, 201)));
-//		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-//				.addGroup(layout.createSequentialGroup().addContainerGap()
-//						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-//								.addComponent(lb_address)
-//								.addComponent(tf_address, GroupLayout.PREFERRED_SIZE,
-//										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-//								.addComponent(lb_port)
-//								.addComponent(tf_port, GroupLayout.PREFERRED_SIZE,
-//										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-//								.addComponent(b_anonymous))
-//						.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-//						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-//								.addComponent(tf_username).addComponent(tf_key)
-//								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-//										.addComponent(lb_username).addComponent(lb_key).addComponent(b_connect)
-//										.addComponent(b_disconnect)))
-//						.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-//						.addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 310,
-//								GroupLayout.PREFERRED_SIZE)
-//						.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-//						.addGroup(layout
-//								.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(tf_chat)
-//								.addComponent(b_send, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE))
-//						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(lb_name)));
 		this.add(splitHorizontal, BorderLayout.CENTER);
 		pack();
 		this.setLocationRelativeTo(null);
