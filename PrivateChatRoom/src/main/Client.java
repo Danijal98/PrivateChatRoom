@@ -28,8 +28,8 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
 public class Client extends JFrame {
-	
-	//View vars
+
+	// View vars
 	private JPanel panelCenter;
 	private JPanel panelRight;
 	private JSplitPane splitHorizontal;
@@ -49,7 +49,7 @@ public class Client extends JFrame {
 	private JTextField tf_key;
 	private JTextField tf_port;
 	private JTextField tf_username;
-	
+
 	private String username, address = "localhost";
 	private ArrayList<String> users = new ArrayList<>();
 	private int port = 2222;
@@ -62,12 +62,12 @@ public class Client extends JFrame {
 	public Client() {
 		initComponents();
 	}
-	
+
 	private void initComponents() {
 		panelCenter = new JPanel();
 		panelRight = new JPanel(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
-		splitHorizontal = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,panelCenter,panelRight);
+		splitHorizontal = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panelCenter, panelRight);
 		lb_address = new JLabel();
 		tf_address = new JTextField();
 		tf_address.setPreferredSize(new Dimension(150, 25));
@@ -99,7 +99,7 @@ public class Client extends JFrame {
 		tf_address.setText("localhost");
 		tf_address.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				//tf_addressActionPerformed(evt);
+				// tf_addressActionPerformed(evt);
 			}
 		});
 
@@ -108,7 +108,7 @@ public class Client extends JFrame {
 		tf_port.setText("2222");
 		tf_port.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				//tf_portActionPerformed(evt);
+				// tf_portActionPerformed(evt);
 			}
 		});
 
@@ -116,11 +116,12 @@ public class Client extends JFrame {
 
 		tf_username.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				//tf_usernameActionPerformed(evt);
+				// tf_usernameActionPerformed(evt);
 			}
 		});
 
 		lb_key.setText("Encrypt Key : ");
+		tf_key.setText("0");
 
 		b_connect.setText("Connect");
 		b_connect.addActionListener(new ActionListener() {
@@ -148,7 +149,7 @@ public class Client extends JFrame {
 				sendActionPerformed(evt);
 			}
 		});
-		
+
 		ta_chat.setColumns(20);
 		ta_chat.setRows(5);
 		ta_chat.setEditable(false);
@@ -161,7 +162,7 @@ public class Client extends JFrame {
 				sendActionPerformed(evt);
 			}
 		});
-		
+
 		this.setLayout(new BorderLayout());
 		jScrollPane1.setPreferredSize(new Dimension(510, 300));
 		tf_chat.setPreferredSize(new Dimension(400, 30));
@@ -170,77 +171,77 @@ public class Client extends JFrame {
 		b_send.setPreferredSize(new Dimension(100, 30));
 		JPanel textPanel = new JPanel(new BorderLayout());
 		textPanel.add(jScrollPane1, BorderLayout.CENTER);
-		
+
 		gbc.gridwidth = 2;
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		panelCenter.add(textPanel,gbc);
-		
+		panelCenter.add(textPanel, gbc);
+
 		gbc.gridwidth = 1;
 		gbc.gridx = 0;
 		gbc.gridy = 1;
-		panelCenter.add(tf_chat,gbc);
-		
+		panelCenter.add(tf_chat, gbc);
+
 		gbc.gridwidth = 1;
 		gbc.gridx = 1;
 		gbc.gridy = 1;
-		panelCenter.add(b_send,gbc);
-		
+		panelCenter.add(b_send, gbc);
+
 		gbc.gridwidth = 1;
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		panelRight.add(lb_username,gbc);
-		
+		panelRight.add(lb_username, gbc);
+
 		gbc.gridwidth = 1;
 		gbc.gridx = 1;
 		gbc.gridy = 0;
-		panelRight.add(tf_username,gbc);
-		
+		panelRight.add(tf_username, gbc);
+
 		gbc.gridwidth = 1;
 		gbc.gridx = 0;
 		gbc.gridy = 1;
-		panelRight.add(lb_address,gbc);
-		
+		panelRight.add(lb_address, gbc);
+
 		gbc.gridwidth = 1;
 		gbc.gridx = 1;
 		gbc.gridy = 1;
-		panelRight.add(tf_address,gbc);
-		
+		panelRight.add(tf_address, gbc);
+
 		gbc.gridwidth = 1;
 		gbc.gridx = 0;
 		gbc.gridy = 2;
-		panelRight.add(lb_port,gbc);
-		
+		panelRight.add(lb_port, gbc);
+
 		gbc.gridwidth = 1;
 		gbc.gridx = 1;
 		gbc.gridy = 2;
-		panelRight.add(tf_port,gbc);
-		
+		panelRight.add(tf_port, gbc);
+
 		gbc.gridwidth = 1;
 		gbc.gridx = 0;
 		gbc.gridy = 3;
-		panelRight.add(lb_key,gbc);
-		
+		panelRight.add(lb_key, gbc);
+
 		gbc.gridwidth = 1;
 		gbc.gridx = 1;
 		gbc.gridy = 3;
-		panelRight.add(tf_key,gbc);
-		
+		panelRight.add(tf_key, gbc);
+
 		gbc.gridwidth = 2;
 		gbc.gridx = 0;
 		gbc.gridy = 4;
-		panelRight.add(b_connect,gbc);
-		
+		panelRight.add(b_connect, gbc);
+
 		gbc.gridwidth = 2;
 		gbc.gridx = 0;
 		gbc.gridy = 5;
-		panelRight.add(b_disconnect,gbc);
-		
+		panelRight.add(b_disconnect, gbc);
+
 		gbc.gridwidth = 2;
 		gbc.gridx = 0;
 		gbc.gridy = 6;
-		panelRight.add(b_anonymous,gbc);
-		
+		panelRight.add(b_anonymous, gbc);
+
 		this.add(splitHorizontal, BorderLayout.CENTER);
 		pack();
 		this.setLocationRelativeTo(null);
@@ -251,16 +252,13 @@ public class Client extends JFrame {
 		IncomingReader.start();
 	}
 
-
 	public void userAdd(String data) {
 		users.add(data);
 	}
 
-
 	public void userRemove(String data) {
 		ta_chat.append(data + " is now offline.\n");
 	}
-
 
 	public void writeUsers() {
 		String[] tempList = new String[(users.size())];
@@ -269,7 +267,6 @@ public class Client extends JFrame {
 			// users.append(token + "\n");
 		}
 	}
-
 
 	public void sendDisconnect() {
 		String bye = (username + ":has Disconected." + ":Disconnect");
@@ -280,7 +277,6 @@ public class Client extends JFrame {
 			ta_chat.append("Could not send Disconnect message.\n");
 		}
 	}
-
 
 	public void disconnect() {
 		try {
@@ -294,18 +290,18 @@ public class Client extends JFrame {
 	}
 
 	/*
-	private void tf_addressActionPerformed(ActionEvent evt) {
-
-	}
-
-	private void tf_portActionPerformed(ActionEvent evt) {
-
-	}
-
-	private void tf_usernameActionPerformed(ActionEvent evt) {
-
-	}
-	*/
+	 * private void tf_addressActionPerformed(ActionEvent evt) {
+	 * 
+	 * }
+	 * 
+	 * private void tf_portActionPerformed(ActionEvent evt) {
+	 * 
+	 * }
+	 * 
+	 * private void tf_usernameActionPerformed(ActionEvent evt) {
+	 * 
+	 * }
+	 */
 
 	private void connectActionPerformed(ActionEvent evt) {
 		if (isConnected == false) {
@@ -340,7 +336,7 @@ public class Client extends JFrame {
 	private void anonymousActionPerformed(ActionEvent evt) {
 		tf_username.setText("");
 		if (isConnected == false) {
-			String anon = "anon";
+			String anon = "user";
 			Random generator = new Random();
 			int i = generator.nextInt(999) + 1;
 			String is = String.valueOf(i);
@@ -377,7 +373,8 @@ public class Client extends JFrame {
 			tf_chat.requestFocus();
 		} else {
 			try {
-				writer.println(username + ":" + tf_chat.getText() + ":" + "Chat");
+				String str = username + ":" + encrypt(tf_chat.getText().trim()) + ":" + "Chat";
+				writer.println(str);
 				writer.flush();
 			} catch (Exception ex) {
 				ta_chat.append("Message was not sent. \n");
@@ -390,6 +387,34 @@ public class Client extends JFrame {
 		tf_chat.requestFocus();
 	}
 	
+	private String encrypt(String string) {
+		String res="";
+		char[] text = string.toCharArray();
+		for (int i = 0; i < text.length; i++) {
+			res += (char) (text[i] + getKey());
+		}
+		return res;
+	}
+
+	private String decrypt(String string) {
+		String res="";
+		char[] text = string.toCharArray();
+		for (int i = 0; i < text.length; i++) {
+			res += (char) (text[i] - getKey());
+		}
+		return res;
+	}
+	
+	private int getKey() {
+		int key;
+		try {
+			key = Integer.parseInt(tf_key.getText().trim());
+		} catch (Exception e) {
+			key = 0;
+		}
+		return key;
+	}
+
 	public class IncomingReader implements Runnable {
 		@Override
 		public void run() {
@@ -401,7 +426,11 @@ public class Client extends JFrame {
 					data = stream.split(":");
 
 					if (data[2].equals(chat)) {
-						ta_chat.append(data[0] + ": " + data[1] + "\n");
+						if(data[1].equals("has connected.") || data[1].equals("has disconnected.")) {
+							ta_chat.append(data[0] + ": " + data[1] + " \n");
+						}else {
+							ta_chat.append(data[0] + ": " + decrypt(data[1]) + " \n");
+						}
 						ta_chat.setCaretPosition(ta_chat.getDocument().getLength());
 					} else if (data[2].equals(connect)) {
 						ta_chat.removeAll();

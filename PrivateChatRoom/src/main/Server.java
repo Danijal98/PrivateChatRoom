@@ -3,9 +3,6 @@ package main;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -16,9 +13,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -27,7 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
-import javax.swing.LayoutStyle;
+import javax.swing.Timer;
 import javax.swing.WindowConstants;
 
 public class Server extends JFrame {
@@ -45,6 +40,7 @@ public class Server extends JFrame {
 
 	private ArrayList<PrintWriter> clientOutputStreams;
 	private ArrayList<String> users;
+	private ServerSocket serverSock;
 
 	public Server() {
 		initComponents();
@@ -152,16 +148,16 @@ public class Server extends JFrame {
 	}
 
 	private void endActionPerformed(ActionEvent evt) {
+		tellEveryone("Server:is stopping and all users will be disconnected.\n:Chat");
+		ta_chat.append("Server stopping");
+		
 		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException ex) {
+			Thread.sleep(2000);
+			serverSock.close();
+		} catch (Exception ex) {
 			Thread.currentThread().interrupt();
 		}
-
-		tellEveryone("Server:is stopping and all users will be disconnected.\n:Chat");
-		ta_chat.append("Server stopping... \n");
 		
-
 		ta_chat.setText("");
 	}
 
@@ -173,10 +169,14 @@ public class Server extends JFrame {
 	}
 
 	private void usersActionPerformed(ActionEvent evt) {
-		ta_chat.append("Online users : \n");
-		for (String current_user : users) {
-			ta_chat.append(current_user);
-			ta_chat.append("\n");
+		if(users==null) {
+			ta_chat.append("No online users : \n");
+		}else {
+			ta_chat.append("Online users : \n");
+			for (String current_user : users) {
+				ta_chat.append(current_user);
+				ta_chat.append("\n");
+			}
 		}
 
 	}
@@ -237,7 +237,7 @@ public class Server extends JFrame {
 			users = new ArrayList<>();
 
 			try {
-				ServerSocket serverSock = new ServerSocket(2222);
+				serverSock = new ServerSocket(2222);
 
 				while (true) {
 					Socket clientSock = serverSock.accept();
@@ -281,9 +281,11 @@ public class Server extends JFrame {
 					ta_chat.append("Received: " + message + "\n");
 					data = message.split(":");
 
+					/*
 					for (String token : data) {
 						ta_chat.append(token + "\n");
 					}
+					*/
 
 					if (data[2].equals(connect)) {
 						tellEveryone((data[0] + ":" + data[1] + ":" + chat));
@@ -299,7 +301,7 @@ public class Server extends JFrame {
 				}
 			} catch (Exception ex) {
 				ta_chat.append("Lost a connection. \n");
-				ex.printStackTrace();
+//				ex.printStackTrace();
 				clientOutputStreams.remove(client);
 			}
 		}
