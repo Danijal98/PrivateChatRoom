@@ -6,6 +6,7 @@ import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
@@ -22,6 +23,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.Timer;
 import javax.swing.WindowConstants;
 
@@ -50,7 +53,7 @@ public class Server extends JFrame {
 		panelCenter = new JPanel(new BorderLayout());
 		panelRight = new JPanel();
 		panelRight.setLayout(new BoxLayout(panelRight, BoxLayout.Y_AXIS));
-		splitHorizontal = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,panelCenter,panelRight);
+		splitHorizontal = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panelCenter, panelRight);
 		jScrollPane1 = new JScrollPane();
 		ta_chat = new JTextArea();
 		b_start = new JButton();
@@ -103,46 +106,16 @@ public class Server extends JFrame {
 				clearActionPerformed(evt);
 			}
 		});
-		
+
 		this.setLayout(new BorderLayout());
 		ta_chat.setEditable(false);
 		jScrollPane1.setPreferredSize(new Dimension(510, 300));
 		panelCenter.add(jScrollPane1);
 		panelRight.add(b_start);
-//		panelRight.add(Box.createGlue());
 		panelRight.add(b_end);
-//		panelRight.add(Box.createGlue());
 		panelRight.add(b_users);
-//		panelRight.add(Box.createGlue());
 		panelRight.add(b_clear);
-		
-//		GroupLayout layout = new GroupLayout(getContentPane());
-//		getContentPane().setLayout(layout);
-//		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(layout
-//				.createSequentialGroup().addContainerGap()
-//				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(jScrollPane1)
-//						.addGroup(layout.createSequentialGroup()
-//								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-//										.addComponent(b_end, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-//												Short.MAX_VALUE)
-//										.addComponent(b_start, javax.swing.GroupLayout.DEFAULT_SIZE, 75,
-//												Short.MAX_VALUE))
-//								.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 291, Short.MAX_VALUE)
-//								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-//										.addComponent(b_clear, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-//												Short.MAX_VALUE)
-//										.addComponent(b_users, GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE))))
-//				.addContainerGap()).addGroup(GroupLayout.Alignment.TRAILING,
-//						layout.createSequentialGroup().addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-//								.addComponent(lb_name).addGap(209, 209, 209)));
-//		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-//				.addGroup(layout.createSequentialGroup().addContainerGap()
-//						.addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE).addGap(18, 18, 18)
-//						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(b_start)
-//								.addComponent(b_users))
-//						.addGap(18, 18, 18).addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-//								.addComponent(b_clear).addComponent(b_end))
-//						.addGap(4, 4, 4).addComponent(lb_name)));
+
 		this.add(splitHorizontal, BorderLayout.CENTER);
 		pack();
 	}
@@ -150,15 +123,10 @@ public class Server extends JFrame {
 	private void endActionPerformed(ActionEvent evt) {
 		tellEveryone("Server:is stopping and all users will be disconnected.\n:Chat");
 		ta_chat.append("Server stopping");
-		
-		try {
-			Thread.sleep(2000);
-			serverSock.close();
-		} catch (Exception ex) {
-			Thread.currentThread().interrupt();
-		}
-		
-		ta_chat.setText("");
+
+		GuiUpdater updater = new GuiUpdater(ta_chat, serverSock);
+		updater.execute();
+
 	}
 
 	private void startActionPerformed(ActionEvent evt) {
@@ -169,9 +137,9 @@ public class Server extends JFrame {
 	}
 
 	private void usersActionPerformed(ActionEvent evt) {
-		if(users==null) {
+		if (users == null) {
 			ta_chat.append("No online users : \n");
-		}else {
+		} else {
 			ta_chat.append("Online users : \n");
 			for (String current_user : users) {
 				ta_chat.append(current_user);
@@ -249,7 +217,9 @@ public class Server extends JFrame {
 					ta_chat.append("Got a connection. \n");
 				}
 			} catch (Exception ex) {
-				ta_chat.append("Error making a connection. \n");
+//				ex.printStackTrace();
+//				ta_chat.append("Error making a connection. \n");
+				System.err.println("Error making a connection.");
 			}
 		}
 	}
@@ -282,10 +252,8 @@ public class Server extends JFrame {
 					data = message.split(":");
 
 					/*
-					for (String token : data) {
-						ta_chat.append(token + "\n");
-					}
-					*/
+					 * for (String token : data) { ta_chat.append(token + "\n"); }
+					 */
 
 					if (data[2].equals(connect)) {
 						tellEveryone((data[0] + ":" + data[1] + ":" + chat));
@@ -306,7 +274,7 @@ public class Server extends JFrame {
 			}
 		}
 	}
-	
+
 	public static void main(String args[]) {
 		EventQueue.invokeLater(new Runnable() {
 			@Override
