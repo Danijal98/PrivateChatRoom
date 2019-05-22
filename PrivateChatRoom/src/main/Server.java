@@ -49,6 +49,9 @@ public class Server extends JFrame {
 		initComponents();
 	}
 
+	/**
+	 * Izgled
+	 */
 	private void initComponents() {
 		panelCenter = new JPanel(new BorderLayout());
 		panelRight = new JPanel();
@@ -120,15 +123,19 @@ public class Server extends JFrame {
 		pack();
 	}
 
+	/**
+	 * Gasenje servera
+	 */
 	private void endActionPerformed(ActionEvent evt) {
-		tellEveryone("Server:is stopping and all users will be disconnected.\n:Chat");
 		ta_chat.append("Server stopping");
 
 		GuiUpdater updater = new GuiUpdater(ta_chat, serverSock);
 		updater.execute();
-
 	}
 
+	/**
+	 * Pokretanje servera
+	 */
 	private void startActionPerformed(ActionEvent evt) {
 		Thread starter = new Thread(new ServerStart());
 		starter.start();
@@ -136,9 +143,12 @@ public class Server extends JFrame {
 		ta_chat.append("Server started...\n");
 	}
 
+	/**
+	 * Prikaz aktivnih korisnika
+	 */
 	private void usersActionPerformed(ActionEvent evt) {
-		if (users == null) {
-			ta_chat.append("No online users : \n");
+		if (users == null || users.isEmpty()) {
+			ta_chat.append("No online users!\n");
 		} else {
 			ta_chat.append("Online users : \n");
 			for (String current_user : users) {
@@ -146,41 +156,41 @@ public class Server extends JFrame {
 				ta_chat.append("\n");
 			}
 		}
-
 	}
 
+	/**
+	 * Ciscenje radne povrsine servera
+	 */
 	private void clearActionPerformed(ActionEvent evt) {
 		ta_chat.setText("");
 	}
 
+	/**
+	 * Dodavanje korisnika u listu
+	 * @param data - ime korisnika kojeg dodajemo
+	 */
 	public void userAdd(String data) {
-		String message, add = ": :Connect", done = "Server: :Done", name = data;
-		ta_chat.append("Before " + name + " added. \n");
+		String done = "Server: :Done", name = data;
 		users.add(name);
-		ta_chat.append("After " + name + " added. \n");
-		String[] tempList = new String[(users.size())];
-		users.toArray(tempList);
 
-		for (String token : tempList) {
-			message = (token + add);
-			tellEveryone(message);
-		}
 		tellEveryone(done);
 	}
 
+	/**
+	 * Brisanje korisnika u listu
+	 * @param data - ime korisnika kojeg brisemo
+	 */
 	public void userRemove(String data) {
-		String message, add = ": :Connect", done = "Server: :Done", name = data;
+		String done = "Server: :Done", name = data;
 		users.remove(name);
-		String[] tempList = new String[(users.size())];
-		users.toArray(tempList);
 
-		for (String token : tempList) {
-			message = (token + add);
-			tellEveryone(message);
-		}
 		tellEveryone(done);
 	}
 
+	/**
+	 * Prosledjivanje poruke svim povezanim klijentima
+	 * @param message - poruka koju prosledjujemo
+	 */
 	public void tellEveryone(String message) {
 		Iterator<PrintWriter> it = clientOutputStreams.iterator();
 
@@ -191,13 +201,15 @@ public class Server extends JFrame {
 				ta_chat.append("Sending: " + message + "\n");
 				writer.flush();
 				ta_chat.setCaretPosition(ta_chat.getDocument().getLength());
-
 			} catch (Exception ex) {
 				ta_chat.append("Error telling everyone. \n");
 			}
 		}
 	}
 
+	/**
+	 * Thread za pokretanje servera, na vezbama obicno pravljeno kao odvojena klasa Server
+	 */
 	public class ServerStart implements Runnable {
 		@Override
 		public void run() {
@@ -208,22 +220,27 @@ public class Server extends JFrame {
 				serverSock = new ServerSocket(2222);
 
 				while (true) {
+					//TODO ne radi iz nepoznatog razloga
+					if (serverSock.isClosed()) return;
+					
 					Socket clientSock = serverSock.accept();
 					PrintWriter writer = new PrintWriter(clientSock.getOutputStream());
 					clientOutputStreams.add(writer);
 
 					Thread listener = new Thread(new ClientHandler(clientSock, writer));
 					listener.start();
-					ta_chat.append("Got a connection. \n");
+					ta_chat.append("Got a connection!\n");
 				}
 			} catch (Exception ex) {
 //				ex.printStackTrace();
-//				ta_chat.append("Error making a connection. \n");
-				System.err.println("Error making a connection.");
+				System.err.println("Error making a connection!");
 			}
 		}
 	}
 
+	/**
+	 * Thread za komunikaciju sa klijentom, na vezbama obicno pravljeno kao odvojena klasa ServerThread
+	 */
 	public class ClientHandler implements Runnable {
 		private BufferedReader reader;
 		private Socket sock;
@@ -238,7 +255,6 @@ public class Server extends JFrame {
 			} catch (Exception ex) {
 				ta_chat.append("Unexpected error... \n");
 			}
-
 		}
 
 		@Override
@@ -251,10 +267,6 @@ public class Server extends JFrame {
 					ta_chat.append("Received: " + message + "\n");
 					data = message.split(":");
 
-					/*
-					 * for (String token : data) { ta_chat.append(token + "\n"); }
-					 */
-
 					if (data[2].equals(connect)) {
 						tellEveryone((data[0] + ":" + data[1] + ":" + chat));
 						userAdd(data[0]);
@@ -264,11 +276,11 @@ public class Server extends JFrame {
 					} else if (data[2].equals(chat)) {
 						tellEveryone(message);
 					} else {
-						ta_chat.append("No Conditions were met. \n");
+						ta_chat.append("No Conditions were met!\n");
 					}
 				}
 			} catch (Exception ex) {
-				ta_chat.append("Lost a connection. \n");
+				ta_chat.append("Lost a connection!\n");
 //				ex.printStackTrace();
 				clientOutputStreams.remove(client);
 			}

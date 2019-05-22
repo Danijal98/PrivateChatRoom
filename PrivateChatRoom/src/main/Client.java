@@ -9,6 +9,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -59,10 +61,18 @@ public class Client extends JFrame {
 	private BufferedReader reader;
 	private PrintWriter writer;
 
+	// Key shift
+	private final int MAX_SHIFT = 126;
+	private final int MIN_SHIFT = 32;
+	private final int MAX_KEY = MAX_SHIFT - MIN_SHIFT;
+
 	public Client() {
 		initComponents();
 	}
 
+	/**
+	 * Izgled
+	 */
 	private void initComponents() {
 		panelCenter = new JPanel();
 		panelRight = new JPanel(new GridBagLayout());
@@ -97,31 +107,32 @@ public class Client extends JFrame {
 		lb_address.setText("Address : ");
 
 		tf_address.setText("localhost");
-		tf_address.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
-				// tf_addressActionPerformed(evt);
-			}
-		});
 
 		lb_port.setText("Port :");
 
 		tf_port.setText("2222");
-		tf_port.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
-				// tf_portActionPerformed(evt);
-			}
-		});
 
 		lb_username.setText("Username :");
 
-		tf_username.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
-				// tf_usernameActionPerformed(evt);
-			}
-		});
-
 		lb_key.setText("Encrypt Key : ");
+
 		tf_key.setText("0");
+		
+		tf_key.addKeyListener(new KeyListener() {
+			@Override
+			public void keyTyped(KeyEvent arg0) {}
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				Integer key = getKey();
+				if (key > MAX_KEY) {
+					tf_key.setText(String.valueOf(MAX_KEY));
+				} else if (key < 0) {
+					tf_key.setText(String.valueOf(0));
+				}
+			}
+			@Override
+			public void keyPressed(KeyEvent arg0) {}
+		});
 
 		b_connect.setText("Connect");
 		b_connect.addActionListener(new ActionListener() {
@@ -260,14 +271,9 @@ public class Client extends JFrame {
 		ta_chat.append(data + " is now offline.\n");
 	}
 
-	public void writeUsers() {
-		String[] tempList = new String[(users.size())];
-		users.toArray(tempList);
-		for (String token : tempList) {
-			// users.append(token + "\n");
-		}
-	}
-
+	/**
+	 * Slanje poruke o diskonektovanju na server
+	 */
 	public void sendDisconnect() {
 		String bye = (username + ":has Disconected." + ":Disconnect");
 		try {
@@ -278,6 +284,9 @@ public class Client extends JFrame {
 		}
 	}
 
+	/**
+	 * Gasenje soketa klijenta
+	 */
 	public void disconnect() {
 		try {
 			ta_chat.append("Disconnected.\n");
@@ -289,20 +298,9 @@ public class Client extends JFrame {
 		tf_username.setEditable(true);
 	}
 
-	/*
-	 * private void tf_addressActionPerformed(ActionEvent evt) {
-	 * 
-	 * }
-	 * 
-	 * private void tf_portActionPerformed(ActionEvent evt) {
-	 * 
-	 * }
-	 * 
-	 * private void tf_usernameActionPerformed(ActionEvent evt) {
-	 * 
-	 * }
+	/**
+	 * Konektovanje klijenta na server
 	 */
-
 	private void connectActionPerformed(ActionEvent evt) {
 		if (isConnected == false) {
 			username = tf_username.getText();
@@ -328,19 +326,24 @@ public class Client extends JFrame {
 		}
 	}
 
+	/**
+	 * Proces diskonektovanja
+	 */
 	private void disconnectActionPerformed(ActionEvent evt) {
 		sendDisconnect();
 		disconnect();
 	}
 
+	/**
+	 * Pravljenje anonimnog klijenta
+	 */
 	private void anonymousActionPerformed(ActionEvent evt) {
 		tf_username.setText("");
 		if (isConnected == false) {
 			String anon = "user";
 			Random generator = new Random();
 			int i = generator.nextInt(999) + 1;
-			String is = String.valueOf(i);
-			anon = anon.concat(is);
+			anon += i;
 			username = anon;
 
 			tf_username.setText(anon);
@@ -366,9 +369,12 @@ public class Client extends JFrame {
 		}
 	}
 
+	/**
+	 * Slanje poruke drugim klijentima
+	 * Desava se na klik dugmeta send i klikom dugmeta enter na tastaturi
+	 */
 	private void sendActionPerformed(ActionEvent evt) {
-		String nothing = "";
-		if ((tf_chat.getText()).equals(nothing)) {
+		if ((tf_chat.getText()).isEmpty()) {
 			tf_chat.setText("");
 			tf_chat.requestFocus();
 		} else {
@@ -386,25 +392,51 @@ public class Client extends JFrame {
 		tf_chat.setText("");
 		tf_chat.requestFocus();
 	}
-	
+
+	/**
+	 * Enkripcija texta
+	 * @param string - Text za enkripciju
+	 */
 	private String encrypt(String string) {
-		String res="";
+		String res = "";
 		char[] text = string.toCharArray();
 		for (int i = 0; i < text.length; i++) {
-			res += (char) (text[i] + getKey());
+			int tmp = (int) text[i];
+			if (tmp + getKey() > MAX_SHIFT) {
+				int difference = tmp + getKey() - MAX_SHIFT;
+				tmp = MIN_SHIFT + difference - 1;
+			} else {
+				tmp += getKey();
+			}
+			res += (char) tmp;
 		}
 		return res;
 	}
 
+	/**
+	 * Dekripcija texta
+	 * @param string - Text za dekripciju
+	 */
 	private String decrypt(String string) {
-		String res="";
+		String res = "";
 		char[] text = string.toCharArray();
 		for (int i = 0; i < text.length; i++) {
-			res += (char) (text[i] - getKey());
+			int tmp = (int) text[i];
+			if (tmp - getKey() < MIN_SHIFT) {
+				int difference = MIN_SHIFT - Math.abs(tmp - getKey());
+				tmp = MAX_SHIFT - difference + 1;
+			} else {
+				tmp = tmp - getKey();
+			}
+			res += (char) tmp;
 		}
 		return res;
 	}
-	
+
+	/**
+	 * Uzima kljuc iz tf_key
+	 * @return 0 - ako je unesen text nije broj, u suprotnom vraca broj
+	 */
 	private int getKey() {
 		int key;
 		try {
@@ -415,6 +447,9 @@ public class Client extends JFrame {
 		return key;
 	}
 
+	/**
+	 * Proces citanja dolazecih poruka
+	 */
 	public class IncomingReader implements Runnable {
 		@Override
 		public void run() {
@@ -426,9 +461,9 @@ public class Client extends JFrame {
 					data = stream.split(":");
 
 					if (data[2].equals(chat)) {
-						if(data[1].equals("has connected.") || data[1].equals("has disconnected.")) {
+						if (data[1].equals("has connected.") || data[1].equals("has disconnected.")) {
 							ta_chat.append(data[0] + ": " + data[1] + " \n");
-						}else {
+						} else {
 							ta_chat.append(data[0] + ": " + decrypt(data[1]) + " \n");
 						}
 						ta_chat.setCaretPosition(ta_chat.getDocument().getLength());
@@ -438,12 +473,11 @@ public class Client extends JFrame {
 					} else if (data[2].equals(disconnect)) {
 						userRemove(data[0]);
 					} else if (data[2].equals(done)) {
-						// users.setText("");
-						writeUsers();
 						users.clear();
 					}
 				}
 			} catch (Exception ex) {
+				System.err.println("Something went wrong!");
 			}
 		}
 	}

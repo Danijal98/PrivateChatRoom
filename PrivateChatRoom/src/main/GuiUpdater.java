@@ -8,6 +8,9 @@ import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
+/**
+ * Pomocna klasa koja animira gasenje servera
+ */
 public class GuiUpdater extends SwingWorker<String, String> {
 
 	private JTextArea ta_chat;
@@ -35,7 +38,6 @@ public class GuiUpdater extends SwingWorker<String, String> {
 	
 	private void addDot() {
 		SwingUtilities.invokeLater(new Runnable() {
-			
 			@Override
 			public void run() {
 				ta_chat.append(".");
